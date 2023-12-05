@@ -32,7 +32,10 @@ public interface ProductService {
     List<ProductEntity> findAllPage(int index);
     
     List<ProductEntity> search(String keyword, int index);
-    
+
+    List<ProductEntity> searchByPrice(float start, float end);
+
+    List<ProductEntity> searchByKeyword(String keyword);
     int countSearch(String keyword);
     int count();
 }

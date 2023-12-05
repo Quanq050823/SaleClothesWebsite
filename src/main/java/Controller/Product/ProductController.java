@@ -42,6 +42,15 @@ public class ProductController extends HttpServlet {
             getDetails(req, resp);
             req.getRequestDispatcher("/product-detail.jsp").forward(req, resp);
         }
+        else if (action.equalsIgnoreCase("searchByPrice")){
+            searchByPrice(req,resp);
+            req.getRequestDispatcher("/product.jsp").forward(req,resp);
+        }
+        else if (action.equalsIgnoreCase("searchByKeyword"))
+        {
+            searchByKeyword(req,resp);
+            req.getRequestDispatcher("/product.jsp").forward(req,resp);
+        }
     }
     
     protected void getShop(HttpServletRequest req, HttpServletResponse resp)
@@ -83,7 +92,30 @@ public class ProductController extends HttpServlet {
             req.setAttribute("error","Error: "+ ex.getMessage());
         }
     }
-    
+    protected  void searchByPrice(HttpServletRequest req, HttpServletResponse resp)throws IOException,ServletException{
+        try{
+            float start = Float.parseFloat(req.getParameter("start"));
+            float end = Float.parseFloat(req.getParameter("end"));
+            List<ProductEntity> productEntityList = productService.searchByPrice(start,end);
+            req.setAttribute("productList",productEntityList);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            req.setAttribute("error","Error"+ex.getMessage());
+        }
+    }
+    protected void searchByKeyword(HttpServletRequest req,HttpServletResponse resp) throws IOException,ServletException{
+        try{
+            String keyword = req.getParameter("keyword");
+            List<ProductEntity> productEntityList = productService.searchByKeyword(keyword);
+            req.setAttribute("productList",productEntityList);
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+            req.setAttribute("error","Error"+ex.getMessage());
+        }
+    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doPost(req, resp);

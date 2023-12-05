@@ -192,6 +192,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductEntity> searchByPrice(float start, float end) {
+        EntityManager entityManager =  JpaConfig.getEntityManager();
+        String jpql = "SELECT p FROM ProductEntity p WHERE p.productPrice >= :start and p.productPrice <= :end";
+        TypedQuery<ProductEntity> query = entityManager.createQuery(jpql,ProductEntity.class);
+        query.setParameter("start",start);
+        query.setParameter("end",end);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<ProductEntity> searchByKeyword(String keyword) {
+        EntityManager entityManager =  JpaConfig.getEntityManager();
+        String jpql = "SELECT p FROM ProductEntity p WHERE p.productName like :keyword or p.category.categoryName like :keyword or p.productStyle like :keyword";
+        TypedQuery<ProductEntity> query = entityManager.createQuery(jpql,ProductEntity.class);
+        query.setParameter("keyword",keyword);
+        return query.getResultList();
+    }
+
+    @Override
     public int countSearch(String keyword) {
         EntityManager entityManager = JpaConfig.getEntityManager();
         String jpql = "SELECT count(p) FROM ProductEntity p WHERE p.productName like :keyword or p.productStyle like :keyword";
