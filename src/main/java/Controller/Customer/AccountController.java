@@ -44,8 +44,6 @@ public class AccountController extends HttpServlet {
         CustomerEntity cus1 = (CustomerEntity) session.getAttribute("user");
 
         try {
-            request.setCharacterEncoding("UTF-8");
-            response.setCharacterEncoding("UTF-8");
             transaction.begin();
             String firstname = request.getParameter("fname");
             String lastname = request.getParameter("lname");
