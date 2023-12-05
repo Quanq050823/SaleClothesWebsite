@@ -29,7 +29,7 @@ public class EmailController extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "/changepass.jsp";
+        String url = "/forgetpass.jsp";
         String action = request.getParameter("action");
 
         if (action.equals("forgetpass")){
@@ -73,7 +73,7 @@ public class EmailController extends HttpServlet {
         if (account == null)
         {
             message = "Sorry, your email isn't exist in our Store!";
-            url = "/changepass.jsp";
+            url = "/forgetpass.jsp";
         }
         else {
             try {
@@ -85,7 +85,7 @@ public class EmailController extends HttpServlet {
             finally {
                 if (transaction.isActive()) {
                     transaction.rollback();
-                    url = "/changepass.jsp";
+                    url = "/forgetpass.jsp";
                 }
                 else
                 {
@@ -117,7 +117,7 @@ public class EmailController extends HttpServlet {
             url = "/verify.jsp";
         }
         request.setAttribute("message", message);
-        request.setAttribute("OTP", OTP);
+        request.setAttribute("useremail", useremail);
         return url;
     }
 
@@ -125,7 +125,32 @@ public class EmailController extends HttpServlet {
     protected String verifyOTP (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url;
+        String message = null;
         url = "/verify.jsp";
+        String email = request.getParameter("email");
+        CustomerEntity account = customerService.findByEmail(email);
+        if (account == null)
+        {
+            message = "Sorry, your OTP is not valid!";
+            email = request.getParameter("email");
+            url = "/verify.jsp";
+        }
+        else {
+            String opt01 = request.getParameter("opt01");
+            String opt02 = request.getParameter("opt02");
+            String opt03 = request.getParameter("opt03");
+            String opt04 = request.getParameter("opt04");
+            String opt05 = request.getParameter("opt05");
+            String opt06 = request.getParameter("opt06");
+            String inputOTP = opt01+opt02+opt03+opt04+opt05+opt06;
+
+            String trueOTP = account.getCustomerOTP();
+            if (inputOTP.equals(trueOTP)) {
+                url = "/changepass.jsp";
+            }
+        }
+        request.setAttribute("message", message);
+        request.setAttribute("useremail", email);
         return url;
     }
 

@@ -32,6 +32,9 @@ public class AccountController extends HttpServlet {
         if (action.equals("edit")){
             url = edit(request,response);
         }
+        else if (action.equals("changepass")){
+            url = changepass(request,response);
+        }
         getServletContext()
                 .getRequestDispatcher(url)
                 .forward(request, response);
@@ -74,6 +77,43 @@ public class AccountController extends HttpServlet {
             entityManager.close();
             entityManagerFactory.close();
         }
+        return url;
+    }
+
+    protected String changepass (HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        String url;
+        String message = null;
+        String email = request.getParameter("email");
+        CustomerEntity account = customerService.findByEmail(email);
+
+
+        String password = request.getParameter("pwd");
+        String repassword = request.getParameter("repwd");
+
+        if (password.equals(repassword)) {
+            try {
+                transaction.begin();
+                account.setCustomerPwd(password);
+                entityManager.merge(account);
+                transaction.commit();
+            } finally {
+                if (transaction.isActive()) {
+                    transaction.rollback();
+                    url = "/changepass.jsp";
+                } else {
+                    url = "/Home.jsp";
+                }
+                entityManager.close();
+                entityManagerFactory.close();
+            }
+        }
+        else {
+            message = "Sorry, Please ReEnter true password!";
+            url = "/changepass.jsp";
+        }
+        request.setAttribute("message", message);
+        request.setAttribute("useremail", email);
         return url;
     }
 }

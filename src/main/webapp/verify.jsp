@@ -53,10 +53,10 @@
 
                   <div class="info">
                     <span class="title">Password recovery</span>
+                    <p class="description">Enter the verify code sent to your mail: ${useremail}</p>
                     <c:if test="${message != null}">
                       <p style="border: #1c1e28; text-align: center; color: #ea1717"><i>${message}</i></p>
                     </c:if>
-                    <p class="description">Enter the verify code sent to your mail!</p>
                   </div>
                   <div class="input-fields">
                     <input placeholder="" type="tel" maxlength="1" name="opt01">
@@ -65,6 +65,7 @@
                     <input placeholder="" type="tel" maxlength="1" name="opt04">
                     <input placeholder="" type="tel" maxlength="1" name="opt05">
                     <input placeholder="" type="tel" maxlength="1" name="opt06">
+                    <input type="hidden" name="email" value=${useremail}>
                   </div>
 
                   <div class="action-btns">
