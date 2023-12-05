@@ -63,10 +63,10 @@ public class LoginController extends HttpServlet {
     protected String go (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         String message = null;
+        String remember = request.getParameter("remember");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String url = "/login.jsp";
-
 
         CustomerEntity cus1 = new CustomerEntity();
         cus1.setCustomerMail(username);
@@ -78,13 +78,19 @@ public class LoginController extends HttpServlet {
             // store the User object as a session attribute
             HttpSession session = request.getSession(true);
             session.setAttribute("user", cus1);
-
-            // add a cookie that stores the user's email to browser
-            Cookie c = new Cookie("emailCookie", username);
-            c.setPath("/");
-            c.setMaxAge(60 * 60 * 24 * 365 * 3); // set age to 2 years
-            response.addCookie(c);
-            url = "/Home.jsp";
+            if (remember != null)
+            {
+                // add a cookie that stores the user's email to browser
+                Cookie c = new Cookie("emailCookie", username);
+                c.setPath("/");
+                c.setMaxAge(60 * 60 * 24 * 365 * 3); // set age to 2 years
+                response.addCookie(c);
+                url = "/Home.jsp";
+            }
+            else
+            {
+                url = "/Home.jsp";
+            }
         }
         else
             message = "Invalid Login Information!";
@@ -130,7 +136,7 @@ public class LoginController extends HttpServlet {
 
             boolean isBodyHTML = true;
             try {
-                util.MailUtilGmail.sendMail(to, from, subject, body,
+                MailUtilGmail.sendMail(to, from, subject, body,
                         isBodyHTML);
             } catch (MessagingException e) {
                 String errorMessage
@@ -153,10 +159,6 @@ public class LoginController extends HttpServlet {
             // store the User object as a session attribute
             HttpSession session = request.getSession();
             session.setAttribute("user", cus);
-            // add a cookie that stores the user's email to browser
-            Cookie c = new Cookie("emailCookie", registusername);
-            c.setMaxAge(60 * 60 * 24 * 365 * 3); // set age to 2 years
-            response.addCookie(c);
             transaction.commit();
         } finally {
             if (transaction.isActive()) {

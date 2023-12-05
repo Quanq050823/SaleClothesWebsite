@@ -13,21 +13,22 @@
 
 				<%CategoryService categoryService = new CategoryServiceImpl();
 					List<model.CategoryEntity> categoryList = categoryService.findAllByActivated();
-					request.setAttribute("categoryList",categoryList);%>
+					request.setAttribute("categoryList",categoryList);
+				%>
 
 				<c:forEach var ="category" items="${categoryList}">
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".A${category.categoryName}">
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".${category.categoryName}">
 						${category.categoryName}
 					</button>
 				</c:forEach>
 			</div>
 
 			<div class="flex-w flex-c-m m-tb-10">
-<%--				<div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">--%>
-<%--					<i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>--%>
-<%--					<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>--%>
-<%--					Filter--%>
-<%--				</div>--%>
+				<div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
+					<i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
+					<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+					Filter
+				</div>
 
 				<div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
 					<i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
@@ -38,16 +39,14 @@
 
 			<!-- Search product -->
 			<div class="dis-none panel-search w-full p-t-10 p-b-15">
-				<div class="bor8 dis-flex p-l-15">
-					<form action="product" method="get">
-						<input type="hidden" name="action" value="searchByKeyword">
-						<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
-							<i class="zmdi zmdi-search"></i>
-						</button>
+				<form action="product" method="get" class="bor8 dis-flex p-l-15">
+					<input type="hidden" name="action" value="searchByKeyword">
+					<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+						<i class="zmdi zmdi-search"></i>
+					</button>
 
-						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="keyword" placeholder="Search">
-					</form>
-				</div>
+					<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="keyword" placeholder="Search">
+				</form>
 			</div>
 
 			<!-- Filter -->
@@ -61,19 +60,21 @@
 							<li class="p-b-6">
 								<c:url var="lowToHighUrl" value="/product">
 									<c:param name="action" value="filter" />
-									<c:param name="productIds" value="${productIds}" />
+									<c:forEach var="productId" items="${productIds}">
+										<c:param name="productIds" value="${productId}" />
+									</c:forEach>
 									<c:param name="flag" value="ASC" />
 								</c:url>
 
 								<c:choose>
-									<c:when test="${param.flag eq 'DESC'}">
+									<c:when test="${param.flag eq 'ASC'}">
 										<a href="${lowToHighUrl}" class="filter-link stext-106 trans-04 filter-link-active">
-											Price: High to Low
+											Price: Low to High
 										</a>
 									</c:when>
 									<c:otherwise>
 										<a href="${lowToHighUrl}" class="filter-link stext-106 trans-04">
-											Price: High to Low
+											Price: Low to High
 										</a>
 									</c:otherwise>
 								</c:choose>
@@ -82,12 +83,14 @@
 							<li class="p-b-6">
 								<c:url var="hightoLowUrl" value="/product">
 									<c:param name="action" value="filter" />
-									<c:param name="productIds" value="${productIds}" />
+									<c:forEach var="productId" items="${productIds}">
+										<c:param name="productIds" value="${productId}" />
+									</c:forEach>
 									<c:param name="flag" value="DESC" />
 								</c:url>
 								<c:choose>
 									<c:when test="${param.flag eq 'DESC'}">
-									<a href="${hightoLowUrl	}" class="filter-link stext-106 trans-04 filter-link-active">
+									<a href="${hightoLowUrl}" class="filter-link stext-106 trans-04 filter-link-active">
 										Price: High to Low
 									</a>
 									</c:when>
@@ -138,7 +141,7 @@
 									</c:otherwise>
 								</c:choose>
 							</li>
-
+							<li class="p-b-6">
 							<c:set var="Range100Url" value="product?action=searchByPrice&start=50.0&end=100.0" />
 							<c:choose>
 								<c:when test="${param.end eq '100.0'}">
@@ -152,7 +155,9 @@
 									</a>
 								</c:otherwise>
 							</c:choose>
+							</li>
 
+							<li class="p-b-6">
 							<c:set var="Range150Url" value="product?action=searchByPrice&start=100.0&end=150.0" />
 							<c:choose>
 								<c:when test="${param.end eq '150.0'}">
@@ -166,6 +171,9 @@
 									</a>
 								</c:otherwise>
 							</c:choose>
+							</li>
+
+							<li class="p-b-6">
 							<c:set var="Range200Url" value="product?action=searchByPrice&start=150.0&end=200.0" />
 							<c:choose>
 								<c:when test="${param.end eq '200.0'}">
@@ -179,6 +187,9 @@
 									</a>
 								</c:otherwise>
 							</c:choose>
+							</li>
+
+							<li class="p-b-6">
 							<c:set var="Range200pUrl" value="product?action=searchByPrice&start=200.0&end=99999.0" />
 							<c:choose>
 								<c:when test="${param.start eq '200.0'}">
@@ -192,6 +203,7 @@
 									</a>
 								</c:otherwise>
 							</c:choose>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -199,10 +211,12 @@
 		</div>
 
 		<div class="row isotope-grid">
-			<% List<ProductEntity> productList = (List<ProductEntity>) session.getAttribute("productList");
+			<% List<ProductEntity> productList = (List<ProductEntity>) request.getAttribute("productList");
 			if (productList != null){
-			for (ProductEntity product :  productList) { %>
-			<c:if test="<%=product.getCategory().getCategoryName()%> == 'Top'">
+			for (ProductEntity product :  productList) {
+				request.setAttribute("product",product);
+			%>
+			<c:if test="${product.category.categoryName == 'Top'}">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item Top">
 					<!-- Block2 -->
 					<div class="block2">
@@ -235,7 +249,7 @@
 					</div>
 				</div>
 			</c:if>
-			<c:if test="<%=product.getCategory().getCategoryName()%>=='Bottom'">
+			<c:if test="${product.category.categoryName =='Bottom'}">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item Bottom">
 					<!-- Block2 -->
 					<div class="block2">
@@ -268,7 +282,7 @@
 					</div>
 				</div>
 			</c:if>
-			<c:if test="<%=product.getCategory().getCategoryName()%>=='Outwears'">
+			<c:if test="${product.category.categoryName =='Outwears'}">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item Outwears">
 					<!-- Block2 -->
 					<div class="block2">
@@ -301,7 +315,7 @@
 					</div>
 				</div>
 			</c:if>
-			<c:if test="<%=product.getCategory().getCategoryName()%>=='Accessories'">
+			<c:if test="${product.category.categoryName=='Accessories'}">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item Accessories">
 					<!-- Block2 -->
 					<div class="block2">

@@ -21,7 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.Console;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,7 +58,8 @@ public class ProductController extends HttpServlet {
         }
         else if (action.equalsIgnoreCase("filter"))
         {
-
+            filterByOrder(req,resp);
+            req.getRequestDispatcher("/product.jsp").forward(req,resp);
         }
     }
     
@@ -65,9 +68,10 @@ public class ProductController extends HttpServlet {
         try {
             List<ProductEntity> productList = productService.findAllDistinct();
             List<CategoryEntity> categoryList = categoryService.findAllByActivated();
-            HttpSession session = req.getSession();
             req.setAttribute("categoryList",categoryList);
-            session.setAttribute("productList", productList);
+            req.setAttribute("productList", productList);
+            List<Integer> productIds = productService.productIdList(productList);
+            req.setAttribute("productIds",productIds);
         }catch (Exception ex){
             ex.printStackTrace();
             req.setAttribute("error","Error: "+ ex.getMessage());
@@ -130,9 +134,10 @@ public class ProductController extends HttpServlet {
     protected void filterByOrder(HttpServletRequest req, HttpServletResponse resp) throws IOException,ServletException{
         try{
             String[] productIdsArray = req.getParameterValues("productIds");
-            List<Integer> productIds = Arrays.stream(productIdsArray)
-                    .map(Integer::valueOf)
-                    .collect(Collectors.toList());
+            List<Integer> productIds = new ArrayList<>();
+            for (int i=0; i<productIdsArray.length; i++){
+                productIds.add(Integer.parseInt(productIdsArray[i]));
+            }
             String flag = req.getParameter("flag");
             List<ProductEntity> productEntityList =productService.filterProductByOrder(productIds,flag);
             List<Integer> productIdList = productService.productIdList(productEntityList);

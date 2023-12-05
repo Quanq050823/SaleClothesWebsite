@@ -14,9 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Struct;
 import java.util.Random;
 
 @WebServlet(urlPatterns = "/email", name = "EmailServlet")
@@ -131,7 +129,6 @@ public class EmailController extends HttpServlet {
         CustomerEntity account = customerService.findByEmail(email);
         if (account == null)
         {
-            message = "Sorry, your OTP is not valid!";
             email = request.getParameter("email");
             url = "/verify.jsp";
         }
@@ -147,6 +144,10 @@ public class EmailController extends HttpServlet {
             String trueOTP = account.getCustomerOTP();
             if (inputOTP.equals(trueOTP)) {
                 url = "/changepass.jsp";
+            }
+            else
+            {
+                message = "Sorry, your OTP is not valid!";
             }
         }
         request.setAttribute("message", message);

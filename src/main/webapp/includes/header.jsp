@@ -83,16 +83,7 @@
                             </li>
 
                             <li class="label1" data-label1="hot">
-
-                                <form action="product" method="post">
-<%--                                    <a href="product?action=getShop">Shop</a>--%>
-                                    <input type="hidden" name="action" value="getShop">
-                                    <button type="submit" value="Submit">
-
-                                        Shop</button>
-                                </form>
-                            </li>
-
+                                <a href="product?action=getShop">Shop</a>
                             <li>
                                 <a href="cart?action=getCart">Cart</a>
                             </li>

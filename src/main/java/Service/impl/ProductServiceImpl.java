@@ -215,31 +215,40 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductEntity> filterProductByOrder(List<Integer> productIds, String flag) {
         List<ProductEntity> productEntityList = new ArrayList<>();
+        
         while (!productIds.isEmpty()) {
+            int currPosition = 0;
             double max = 0;
+            int index = 0;
+            
             double min = 99999;
             ProductEntity product = new ProductEntity();
             if (Objects.equals(flag, "DESC")) {
                 for (Integer item : productIds) {
+                    index ++;
                     ProductEntity productDto = findById(item);
                     if (productDto.getProductPrice() > max) {
+                        currPosition = index;
                         max = productDto.getProductPrice();
                         product = productDto;
                     }
                 }
             }
+            
             if(Objects.equals(flag, "ASC"))
             {
                 for (Integer item : productIds) {
+                    index ++;
                     ProductEntity productDto = findById(item);
                     if (productDto.getProductPrice() < min) {
+                        currPosition = index;
                         min = productDto.getProductPrice();
                         product = productDto;
                     }
                 }
             }
             productEntityList.add(product);
-            productIds.remove(product.getProductId());
+            productIds.remove(currPosition - 1);
         }
         return  productEntityList;
     }
