@@ -5,7 +5,9 @@ import Service.impl.CustomerServiceImpl;
 import model.Cart;
 import model.CustomerEntity;
 import util.CookieUtil;
+import util.MailUtilGmail;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -30,21 +32,11 @@ public class LoginController extends HttpServlet {
 
         String url = "/login.jsp";
         String action = request.getParameter("action");
-        if (action == null) {
-            action = "stay";  // default action
-        }
-        if (action.equals("stay")){
-            url = "/login.jsp";
-        }
         //      <--- Login --->
-        else if (action.equals("go")){
+        if (action.equals("go")){
             url = go(request,response);
         }
 
-        //      <--- Email Sending --->
-        else if (action.equals("sendmessage")){
-            sendMessage(request, response, url);
-        }
         //      <--- Regist --->
         else if (action.equals("regist")){
             url = regist(request, response);
@@ -86,7 +78,7 @@ public class LoginController extends HttpServlet {
             // store the User object as a session attribute
             HttpSession session = request.getSession(true);
             session.setAttribute("user", cus1);
-    
+
             // add a cookie that stores the user's email to browser
             Cookie c = new Cookie("emailCookie", username);
             c.setPath("/");
@@ -96,16 +88,9 @@ public class LoginController extends HttpServlet {
         }
         else
             message = "Invalid Login Information!";
-        
+
         request.setAttribute("message", message);
         return url;
-    }
-    
-    protected void sendMessage (HttpServletRequest request, HttpServletResponse response, String url)
-            throws ServletException, IOException{
-        String useremail = request.getParameter("email");
-        String messages = request.getParameter("msg");
-        url = "/Home.jsp";
     }
 
     protected String regist (HttpServletRequest request, HttpServletResponse response)
@@ -127,6 +112,43 @@ public class LoginController extends HttpServlet {
             Cart cart = new Cart();
             cart.setCustomer(cus);
             entityManager.persist(cart);
+
+            // send email to user
+            String to = registusername;
+            String from = "coza@store.com";
+            String subject = "Coza - Customer account confirmation";
+            String body =
+                    "<h1 style=\"color: #633b00\">Coza</h1>\n" +
+                            "<h2 style=\"color: #633b00\">Welcome to Coza!</h2>\n" +
+                            "<p>Congratulations, you have successfully activated your customer account. Next time you make a purchase, please log in to make payment more convenient. Come to our store\n" +
+                            "</p>\n" +
+                            "<button style=\"background-color: #d7ffef; width: 200px; height: 100px; border-radius: 10px\">\n" +
+                            "<a href=\"http://localhost:8080/demo4_war_exploded/\" style=\"color: #1c1e28\">Go To Our Store</a>\n" +
+                            "</button>" +
+                            "<p>If you have any questions, don't hesitate to contact us at:\n" +
+                            "\t<a href=\"mailto:quangcuatuonglai@gmail.com\" style=\"font-size:14px;text-decoration:none;color:#1666a2\" target=\"_blank\">quangcuatuonglai@gmail.com</a></p>";
+
+            boolean isBodyHTML = true;
+            try {
+                util.MailUtilGmail.sendMail(to, from, subject, body,
+                        isBodyHTML);
+            } catch (MessagingException e) {
+                String errorMessage
+                        = "ERROR: Unable to send email. "
+                        + "Check Tomcat logs for details.<br>"
+                        + "NOTE: You may need to configure your system "
+                        + "as described in chapter 14.<br>"
+                        + "ERROR MESSAGE: " + e.getMessage();
+                request.setAttribute("errorMessage", errorMessage);
+                this.log(
+                        "Unable to send email. \n"
+                                + "Here is the email you tried to send: \n"
+                                + "=====================================\n"
+                                + "TO: " + registusername + "\n"
+                                + "FROM: " + from + "\n"
+                                + "SUBJECT: " + subject + "\n\n"
+                                + body + "\n\n");
+            }
 
             // store the User object as a session attribute
             HttpSession session = request.getSession();
@@ -150,7 +172,7 @@ public class LoginController extends HttpServlet {
         }
         return url;
     }
-    
+
     private String checkuser (HttpServletRequest request,
                               HttpServletResponse response) {
         HttpSession session = request.getSession(true);
@@ -171,15 +193,15 @@ public class LoginController extends HttpServlet {
                 url = "/customer-account.jsp";
             }
         }
-        
+
         else {
             url = "/customer-account.jsp";
         }
         return url;
     }
-    
+
     private String checkcookies (HttpServletRequest request,
-                                HttpServletResponse response) {
+                                 HttpServletResponse response) {
         HttpSession session = request.getSession();
         CustomerEntity user = (CustomerEntity) session.getAttribute("user");
         String url;
@@ -202,7 +224,7 @@ public class LoginController extends HttpServlet {
     }
 
     private String logout (HttpServletRequest request,
-                                 HttpServletResponse response) {
+                           HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             cookie.setMaxAge(0); //delete the cookie
@@ -221,14 +243,6 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        CustomerEntity user = (CustomerEntity) session.getAttribute("user");
-
-        if (user != null || session != null) {
-            request.setAttribute("isLoggedIn", true);
-        } else {
-            request.setAttribute("isLoggedIn", false);
-        }
         doPost(request, response);
     }
 }

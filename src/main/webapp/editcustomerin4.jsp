@@ -1,4 +1,5 @@
 <%@ include file="includes/header.jsp" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <section class="address margin-top-20">
     <div class="container page_address">
@@ -33,7 +34,7 @@
                                         <label style="font-weight: bold;">Province<span>*</span></label>
                                         <select class="field-input" id="ls_province" name="customer_shipping_province">
                                         </select>
-                                        <input type="text" id="input_ls_province" name="province" value="">
+                                        <input type="hidden" id="input_ls_province" name="province" value="">
                                     </fieldset>
                                 </div>
                                 <div class="col-xs-12 col-lg-12">
@@ -41,7 +42,7 @@
                                         <label style="font-weight: bold;">District<span>*</span></label>
                                         <select class="field-input" id="ls_district" name="customer_shipping_district">
                                         </select>
-                                        <input type="text" id="input_ls_district" name="district" value="">
+                                        <input type="hidden" id="input_ls_district" name="district" value="">
                                     </fieldset>
                                 </div>
                                 <div class="col-xs-12 col-lg-12">
@@ -49,7 +50,7 @@
                                         <label style="font-weight: bold;">Ward<span>*</span></label>
                                         <select class="field-input" id="ls_ward" name="customer_shipping_ward">
                                         </select>
-                                        <input type="text" id="input_ls_ward" name="ward" value="">
+                                        <input type="hidden" id="input_ls_ward" name="ward" value="">
                                     </fieldset>
                                 </div>
                                 <div class="col-xs-12 col-lg-12">
