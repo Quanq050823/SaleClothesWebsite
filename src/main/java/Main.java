@@ -24,13 +24,13 @@ public class Main {
         EntityTransaction transaction = entityManager.getTransaction();
         ReviewService reviewService = new ReviewServiceImpl();
         CategoryService categoryService = new CategoryServiceImpl();
-        
-        CustomerEntity customerEntity = JpaConfig.getEntityManager().find(CustomerEntity.class, 6);
-        ProductEntity productEntity = JpaConfig.getEntityManager().find(ProductEntity.class, 3);
-    
-        List<CategoryEntity> categoryEntityList = categoryService.findAllByActivated();
-        for (CategoryEntity categoryEntity:categoryEntityList){
-            System.out.println(categoryEntity.getCategoryName());
-        }
+
+//        CustomerEntity customerEntity = JpaConfig.getEntityManager().find(CustomerEntity.class, 6);
+//        ProductEntity productEntity = JpaConfig.getEntityManager().find(ProductEntity.class, 3);
+//
+//        List<CategoryEntity> categoryEntityList = categoryService.findAllByActivated();
+//        for (CategoryEntity categoryEntity:categoryEntityList){
+//            System.out.println(categoryEntity.getCategoryName());
+//        }
     }
 }

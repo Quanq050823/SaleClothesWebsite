@@ -16,7 +16,8 @@ public class CustomerEntity {
     private String customerAddress;
     private String customerMail;
     private String customerPwd;
-    
+    private String customerOTP;
+
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<OrderEntity> orders;
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
@@ -26,7 +27,7 @@ public class CustomerEntity {
         this.cart = new Cart();
         this.orders= new ArrayList<>();
     }
-    public CustomerEntity(int customerId, String customerFName, String customerLName, String customerPhone, String customerAddress, String customerMail, String customerPwd, List<OrderEntity> orders, Cart cart) {
+    public CustomerEntity(int customerId, String customerFName, String customerLName, String customerPhone, String customerAddress, String customerMail, String customerPwd, String customerOTP, List<OrderEntity> orders, Cart cart) {
         this.customerId = customerId;
         this.customerFName = customerFName;
         this.customerLName = customerLName;
@@ -34,8 +35,10 @@ public class CustomerEntity {
         this.customerAddress = customerAddress;
         this.customerMail = customerMail;
         this.customerPwd = customerPwd;
+        this.customerOTP = customerOTP;
         this.orders = orders;
         this.cart = cart;
+
     }
 
     public int getCustomerId() {
@@ -89,10 +92,20 @@ public class CustomerEntity {
     public String getCustomerPwd() {
         return customerPwd;
     }
-    
+
+    public String getCustomerOTP() {
+        return customerOTP;
+    }
+
+    public void setCustomerOTP(String customerOTP) {
+        this.customerOTP = customerOTP;
+    }
+
+
     public void setCustomerPwd(String customerPwd) {
         this.customerPwd = customerPwd;
     }
+
     
     public List<OrderEntity> getOrders() {
         return orders;
