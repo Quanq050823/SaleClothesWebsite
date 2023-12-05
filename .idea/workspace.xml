@@ -11,11 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="24af693c-bbe7-4fca-97ec-2b9d632f2283" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controller/Customer/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controller/Customer/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controller/Customer/EmailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controller/Customer/EmailController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/changepass.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/forgetpass.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/verify.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/verify.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/js/vietnamlocalselector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/js/vietnamlocalselector.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +173,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1701786097346</updated>
-      <workItem from="1701786099088" duration="5584000" />
+      <workItem from="1701786099088" duration="6219000" />
     </task>
     <servers />
   </component>
