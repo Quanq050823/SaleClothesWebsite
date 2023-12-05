@@ -144,7 +144,6 @@
                                                             <label class="field-label" for="ls_province"> City  </label>
                                                             <select class="field-input" id="ls_province" name="customer_shipping_province">
                                                             </select>
-                                                            <input type="hidden" id="input_ls_province" name="province" value="">
                                                         </div>
                                                     </div>
                                                     <div class="field field-show-floating-label field-required field-third ">
@@ -152,7 +151,6 @@
                                                             <label class="field-label" for="ls_district">District</label>
                                                             <select class="field-input" id="ls_district" name="customer_shipping_district">
                                                             </select>
-                                                            <input type="hidden" id="input_ls_district" name="district" value="">
                                                         </div>
                                                     </div>
                                                     <div class="field field-show-floating-label field-required  field-third  ">
@@ -160,7 +158,6 @@
                                                             <label class="field-label" for="ls_ward">Ward</label>
                                                             <select class="field-input" id="ls_ward" name="customer_shipping_ward">
                                                             </select>
-                                                            <input type="hidden" id="input_ls_ward" name="ward" value="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -174,8 +171,12 @@
 
                     <div class="step-footer" id="step-footer-checkout">
                         <form action="order" id="checkout_complete" method="post">
+                            <input type="hidden" name="action" value="create">
+                            <input type="hidden" id="input_ls_province" name="province" value="">
+                            <input type="hidden" id="input_ls_district" name="district" value="">
+                            <input type="hidden" id="input_ls_ward" name="ward" value="">
+                            <input type="hidden" class="form-control req " name="street" placeholder="Input your home address number" id="input_billing_address_address1" value="">
                             <button type="submit" class="step-footer-continue-btn btn" onclick="setInputValue()">
-                                <input type="hidden" name="action" value="create">
                                 <span class="btn-content">Complete</span>
                                 <i class="btn-spinner icon icon-button-spinner"></i>
                             </button>
@@ -184,14 +185,17 @@
                     </div>
                     <script>
                         function setInputValue() {
-                            var selectedprovince = $("#ls_province").find(":selected").val();
+                            var selectedprovince = $("#ls_province").find(":selected").text();
                             $("#input_ls_province").val(selectedprovince);
 
-                            var selecteddistrict = $("#ls_district").find(":selected").val();
+                            var selecteddistrict = $("#ls_district").find(":selected").text();
                             $("#input_ls_district").val(selecteddistrict);
 
-                            var selectedward = $("#ls_ward").find(":selected").val();
+                            var selectedward = $("#ls_ward").find(":selected").text();
                             $("#input_ls_ward").val(selectedward);
+
+                            var address = $("#billing_address_address1").val();
+                            $("#input_billing_address_address1").val(address);
                         }
                     </script>
                 </div>
