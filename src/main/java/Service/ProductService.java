@@ -35,6 +35,9 @@ public interface ProductService {
 
     List<ProductEntity> searchByPrice(float start, float end);
 
+    List<Integer> productIdList(List<ProductEntity> productEntityList);
+
+    List<ProductEntity> filterProductByOrder(List<Integer> productIds,String flag);
     List<ProductEntity> searchByKeyword(String keyword);
     int countSearch(String keyword);
     int count();

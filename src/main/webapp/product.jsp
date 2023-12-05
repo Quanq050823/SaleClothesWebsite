@@ -16,7 +16,7 @@
 					request.setAttribute("categoryList",categoryList);%>
 
 				<c:forEach var ="category" items="${categoryList}">
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".${category.categoryName}">
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".A${category.categoryName}">
 						${category.categoryName}
 					</button>
 				</c:forEach>
@@ -57,18 +57,46 @@
 						<div class="mtext-102 cl2 p-b-15">
 							Sort By
 						</div>
-
 						<ul>
 							<li class="p-b-6">
-								<a href="product?action=filter&" class="filter-link stext-106 trans-04">
-									Price: Low to High
-								</a>
+								<c:url var="lowToHighUrl" value="/product">
+									<c:param name="action" value="filter" />
+									<c:param name="productIds" value="${productIds}" />
+									<c:param name="flag" value="ASC" />
+								</c:url>
+
+								<c:choose>
+									<c:when test="${param.flag eq 'DESC'}">
+										<a href="${lowToHighUrl}" class="filter-link stext-106 trans-04 filter-link-active">
+											Price: High to Low
+										</a>
+									</c:when>
+									<c:otherwise>
+										<a href="${lowToHighUrl}" class="filter-link stext-106 trans-04">
+											Price: High to Low
+										</a>
+									</c:otherwise>
+								</c:choose>
 							</li>
 
 							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									Price: High to Low
-								</a>
+								<c:url var="hightoLowUrl" value="/product">
+									<c:param name="action" value="filter" />
+									<c:param name="productIds" value="${productIds}" />
+									<c:param name="flag" value="DESC" />
+								</c:url>
+								<c:choose>
+									<c:when test="${param.flag eq 'DESC'}">
+									<a href="${hightoLowUrl	}" class="filter-link stext-106 trans-04 filter-link-active">
+										Price: High to Low
+									</a>
+									</c:when>
+									<c:otherwise>
+										<a href="${hightoLowUrl	}" class="filter-link stext-106 trans-04">
+											Price: High to Low
+										</a>
+									</c:otherwise>
+								</c:choose>
 							</li>
 						</ul>
 					</div>
@@ -174,7 +202,7 @@
 			<% List<ProductEntity> productList = (List<ProductEntity>) session.getAttribute("productList");
 			if (productList != null){
 			for (ProductEntity product :  productList) { %>
-			<c:if test="<%=product.getCategory().getCategoryName()%>=='Top'}">
+			<c:if test="<%=product.getCategory().getCategoryName()%> == 'Top'">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item Top">
 					<!-- Block2 -->
 					<div class="block2">
@@ -207,7 +235,7 @@
 					</div>
 				</div>
 			</c:if>
-			<c:if test="<%=product.getCategory().getCategoryName()%>=='Bottom'}">
+			<c:if test="<%=product.getCategory().getCategoryName()%>=='Bottom'">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item Bottom">
 					<!-- Block2 -->
 					<div class="block2">
@@ -240,7 +268,7 @@
 					</div>
 				</div>
 			</c:if>
-			<c:if test="<%=product.getCategory().getCategoryName()%>=='Outwears'}">
+			<c:if test="<%=product.getCategory().getCategoryName()%>=='Outwears'">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item Outwears">
 					<!-- Block2 -->
 					<div class="block2">
@@ -273,7 +301,7 @@
 					</div>
 				</div>
 			</c:if>
-			<c:if test="<%=product.getCategory().getCategoryName()%>=='Accessories'}">
+			<c:if test="<%=product.getCategory().getCategoryName()%>=='Accessories'">
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item Accessories">
 					<!-- Block2 -->
 					<div class="block2">

@@ -12,6 +12,7 @@ import model.ProductEntity;
 import model.Review;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.Console;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = "/product", name = "ProductListServlet")
 public class ProductController extends HttpServlet {
@@ -50,6 +53,10 @@ public class ProductController extends HttpServlet {
         {
             searchByKeyword(req,resp);
             req.getRequestDispatcher("/product.jsp").forward(req,resp);
+        }
+        else if (action.equalsIgnoreCase("filter"))
+        {
+
         }
     }
     
@@ -92,12 +99,14 @@ public class ProductController extends HttpServlet {
             req.setAttribute("error","Error: "+ ex.getMessage());
         }
     }
-    protected  void searchByPrice(HttpServletRequest req, HttpServletResponse resp)throws IOException,ServletException{
+    protected void searchByPrice(HttpServletRequest req, HttpServletResponse resp)throws IOException,ServletException{
         try{
             float start = Float.parseFloat(req.getParameter("start"));
             float end = Float.parseFloat(req.getParameter("end"));
             List<ProductEntity> productEntityList = productService.searchByPrice(start,end);
+            List<Integer> productIds = productService.productIdList(productEntityList);
             req.setAttribute("productList",productEntityList);
+            req.setAttribute("productIds",productIds);
         }
         catch (Exception ex)
         {
@@ -109,7 +118,26 @@ public class ProductController extends HttpServlet {
         try{
             String keyword = req.getParameter("keyword");
             List<ProductEntity> productEntityList = productService.searchByKeyword(keyword);
+            List<Integer> productIds = productService.productIdList(productEntityList);
             req.setAttribute("productList",productEntityList);
+            req.setAttribute("productIds",productIds);
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+            req.setAttribute("error","Error"+ex.getMessage());
+        }
+    }
+    protected void filterByOrder(HttpServletRequest req, HttpServletResponse resp) throws IOException,ServletException{
+        try{
+            String[] productIdsArray = req.getParameterValues("productIds");
+            List<Integer> productIds = Arrays.stream(productIdsArray)
+                    .map(Integer::valueOf)
+                    .collect(Collectors.toList());
+            String flag = req.getParameter("flag");
+            List<ProductEntity> productEntityList =productService.filterProductByOrder(productIds,flag);
+            List<Integer> productIdList = productService.productIdList(productEntityList);
+            req.setAttribute("productList",productEntityList);
+            req.setAttribute("productIds",productIdList);
         }catch (Exception ex)
         {
             ex.printStackTrace();
