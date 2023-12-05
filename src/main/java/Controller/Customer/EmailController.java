@@ -125,7 +125,6 @@ public class EmailController extends HttpServlet {
     protected String verifyOTP (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url;
-        request.getAttribute("")
         url = "/verify.jsp";
         return url;
     }
