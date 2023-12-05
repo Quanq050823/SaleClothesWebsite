@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -188,6 +189,67 @@ public class ProductServiceImpl implements ProductService {
         query.setParameter("keyword","%" + keyword +"%");
         query.setFirstResult(index*6);
         query.setMaxResults(6);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<ProductEntity> searchByPrice(float start, float end) {
+        EntityManager entityManager =  JpaConfig.getEntityManager();
+        String jpql = "SELECT p FROM ProductEntity p WHERE p.productPrice >= :start and p.productPrice <= :end";
+        TypedQuery<ProductEntity> query = entityManager.createQuery(jpql,ProductEntity.class);
+        query.setParameter("start",start);
+        query.setParameter("end",end);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Integer> productIdList(List<ProductEntity> productEntityList) {
+        List<Integer> productIdList = new ArrayList<>();
+        for(ProductEntity product : productEntityList)
+        {
+            productIdList.add(product.getProductId());
+        }
+        return productIdList;
+    }
+
+    @Override
+    public List<ProductEntity> filterProductByOrder(List<Integer> productIds, String flag) {
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        while (!productIds.isEmpty()) {
+            double max = 0;
+            double min = 99999;
+            ProductEntity product = new ProductEntity();
+            if (Objects.equals(flag, "DESC")) {
+                for (Integer item : productIds) {
+                    ProductEntity productDto = findById(item);
+                    if (productDto.getProductPrice() > max) {
+                        max = productDto.getProductPrice();
+                        product = productDto;
+                    }
+                }
+            }
+            if(Objects.equals(flag, "ASC"))
+            {
+                for (Integer item : productIds) {
+                    ProductEntity productDto = findById(item);
+                    if (productDto.getProductPrice() < min) {
+                        min = productDto.getProductPrice();
+                        product = productDto;
+                    }
+                }
+            }
+            productEntityList.add(product);
+            productIds.remove(product.getProductId());
+        }
+        return  productEntityList;
+    }
+
+    @Override
+    public List<ProductEntity> searchByKeyword(String keyword) {
+        EntityManager entityManager =  JpaConfig.getEntityManager();
+        String jpql = "SELECT p FROM ProductEntity p WHERE p.productName like :keyword or p.category.categoryName like :keyword or p.productStyle like :keyword";
+        TypedQuery<ProductEntity> query = entityManager.createQuery(jpql,ProductEntity.class);
+        query.setParameter("keyword",keyword);
         return query.getResultList();
     }
 
