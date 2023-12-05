@@ -105,7 +105,7 @@ public class OrderController extends HttpServlet {
         // Create order
         OrderEntity order = new OrderEntity();
         order.setCustomer(user);
-        order.setOrderShipping((float) (0.1*tempPrice));
+        order.setOrderShipping(9);
         order.setOrderDiscount(0);
         order.setOrderTotal(tempPrice - tempPrice*order.getOrderDiscount() + order.getOrderShipping());
         order.setOrderPaymentMethod("COD");
